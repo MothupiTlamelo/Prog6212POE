@@ -1,0 +1,91 @@
+﻿@model IEnumerable<CMCS.Models.Claim>
+@{
+    ViewData["Title"] = "Coordinator Dashboard";
+}
+
+<div class="min-h-screen bg-gradient-to-b from-blue-600 via-blue-500 to-indigo-500 flex flex-col items-center py-12 px-6 relative overflow-hidden">
+
+    <!-- Background floating circles -->
+    <div id="bg-circles-coord" class="absolute w-full h-full top-0 left-0 z-0"></div>
+
+    <div class="z-10 w-full max-w-6xl bg-white rounded-3xl shadow-2xl p-8">
+        <h2 class="text-4xl font-extrabold mb-6 text-center text-gray-800">Coordinator Dashboard</h2>
+
+        @if (!Model.Any())
+        {
+            <p class="text-center text-gray-600 font-semibold">No claims submitted yet.</p>
+        }
+        else
+        {
+            <div class="overflow-x-auto">
+                <table class="min-w-full table-auto rounded-xl border border-gray-200">
+                    <thead>
+                        <tr class="bg-blue-500 text-white text-left">
+                            <th class="px-4 py-2">Claim ID</th>
+                            <th class="px-4 py-2">Lecturer ID</th>
+                            <th class="px-4 py-2">Month</th>
+                            <th class="px-4 py-2">Status</th>
+                            <th class="px-4 py-2">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-gray-50">
+                        @foreach (var claim in Model)
+                        {
+                            <tr class="border-b border-gray-200">
+                                <td class="px-4 py-2 font-semibold">@claim.ClaimId</td>
+                                <td class="px-4 py-2">@claim.LecturerId</td>
+                                <td class="px-4 py-2">@claim.ClaimMonth</td>
+                                <td class="px-4 py-2 font-bold">@claim.Status</td>
+                                <td class="px-4 py-2 flex gap-2">
+                                    <form method="post" asp-action="Approve" asp-route-id="@claim.ClaimId">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="px-4 py-2 bg-green-500 text-white rounded-xl hover:scale-105 transform transition-all shadow">
+                                            Approve
+                                        </button>
+                                    </form>
+                                    <form method="post" asp-action="Reject" asp-route-id="@claim.ClaimId">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="px-4 py-2 bg-red-500 text-white rounded-xl hover:scale-105 transform transition-all shadow">
+                                            Reject
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script>
+        // Floating Background Circles
+        const bgCircles = document.getElementById("bg-circles-coord");
+        const colors = ["#FFD700", "#FF69B4", "#00FFFF", "#FF4500"];
+        for (let i = 0; i < 20; i++) {
+            const div = document.createElement("div");
+            div.style.position = "absolute";
+            div.style.borderRadius = "50%";
+            div.style.background = colors[Math.floor(Math.random() * colors.length)];
+            div.style.width = div.style.height = `${Math.random() * 60 + 20}px`;
+            div.style.top = `${Math.random() * 100}%`;
+            div.style.left = `${Math.random() * 100}%`;
+            div.style.opacity = 0.4;
+            bgCircles.appendChild(div);
+            gsap.to(div, {
+                y: "+=100",
+                x: "+=100",
+                repeat: -1,
+                yoyo: true,
+                duration: Math.random() * 5 + 5,
+                ease: "sine.inOut"
+            });
+        }
+
+        // Animate Table Rows
+        gsap.from("tbody tr", { duration: 1, opacity: 0, y: 50, stagger: 0.1, ease: "power2.out" });
+    </script>
+}

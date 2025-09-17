@@ -1,0 +1,132 @@
+﻿@model CMCS.Models.Claim
+@{
+    ViewData["Title"] = "Submit Monthly Claim";
+}
+
+<div class="min-h-screen bg-gradient-to-b from-purple-700 via-pink-600 to-indigo-500 flex flex-col items-center py-12 px-6 relative overflow-hidden">
+
+    <!-- Background floating circles -->
+    <div id="bg-circles-submit" class="absolute w-full h-full top-0 left-0 z-0"></div>
+
+    <div class="z-10 w-full max-w-4xl bg-white rounded-3xl shadow-2xl p-8">
+        <h2 class="text-4xl font-extrabold mb-6 text-center text-gray-800">Submit Monthly Claim</h2>
+
+        @if (TempData["Message"] != null)
+        {
+            <div class="bg-green-100 text-green-800 p-4 rounded mb-6 text-center font-semibold">
+                @TempData["Message"]
+            </div>
+        }
+
+        <!-- Make sure to add enctype for file uploads -->
+        <form asp-action="Submit" method="post" enctype="multipart/form-data" class="space-y-6">
+            @Html.AntiForgeryToken()
+
+            <div class="flex flex-col md:flex-row gap-4">
+                <div class="flex-1">
+                    <label class="block text-gray-700 font-semibold mb-2">Lecturer ID</label>
+                    <input type="text" asp-for="LecturerId" placeholder="Enter your ID" required
+                           class="w-full p-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500" />
+                </div>
+                <div class="flex-1">
+                    <label class="block text-gray-700 font-semibold mb-2">Claim Month</label>
+                    <input type="month" asp-for="ClaimMonth" required
+                           class="w-full p-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500" />
+                </div>
+            </div>
+
+            <!-- Claim Lines Table -->
+            <div>
+                <h3 class="text-xl font-bold mb-2 text-gray-700">Work Lines</h3>
+                <table class="w-full table-auto border-collapse">
+                    <thead>
+                        <tr class="bg-purple-500 text-white text-left">
+                            <th class="px-3 py-2 rounded-tl-xl">Date</th>
+                            <th class="px-3 py-2">Activity</th>
+                            <th class="px-3 py-2">Hours</th>
+                            <th class="px-3 py-2">Rate</th>
+                            <th class="px-3 py-2">Amount</th>
+                            <th class="px-3 py-2 rounded-tr-xl">File</th>
+                        </tr>
+                    </thead>
+                    <tbody id="claimLinesBody" class="bg-gray-50">
+                        <tr>
+                            <td><input type="date" name="ClaimLines[0].Date" required class="p-2 rounded border border-gray-300 w-full" /></td>
+                            <td><input type="text" name="ClaimLines[0].ActivityDescription" placeholder="Activity" required class="p-2 rounded border border-gray-300 w-full" /></td>
+                            <td><input type="number" name="ClaimLines[0].HoursWorked" placeholder="Hours" step="0.1" required class="p-2 rounded border border-gray-300 w-full" oninput="updateAmount(this)" /></td>
+                            <td><input type="number" name="ClaimLines[0].HourlyRate" placeholder="Rate" step="0.01" required class="p-2 rounded border border-gray-300 w-full" oninput="updateAmount(this)" /></td>
+                            <td class="lineAmount px-2 py-1 font-semibold">0.00</td>
+                            <td><input type="file" name="ClaimLines[0].Attachment" class="p-1 w-full" /></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <button type="button" onclick="addLine()"
+                        class="mt-3 px-6 py-2 bg-purple-500 text-white rounded-xl font-bold hover:bg-purple-600 transition-all">
+                    Add Line
+                </button>
+            </div>
+
+            <div class="text-center mt-6">
+                <button type="submit"
+                        class="px-10 py-3 bg-pink-500 text-white rounded-3xl font-extrabold text-xl hover:scale-105 transform transition-all shadow-lg">
+                    Submit Claim
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script>
+        let lineIndex = 1;
+        function addLine() {
+            const tbody = document.getElementById('claimLinesBody');
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td><input type="date" name="ClaimLines[${lineIndex}].Date" required class="p-2 rounded border border-gray-300 w-full"/></td>
+                <td><input type="text" name="ClaimLines[${lineIndex}].ActivityDescription" placeholder="Activity" required class="p-2 rounded border border-gray-300 w-full"/></td>
+                <td><input type="number" name="ClaimLines[${lineIndex}].HoursWorked" placeholder="Hours" step="0.1" required class="p-2 rounded border border-gray-300 w-full" oninput="updateAmount(this)"/></td>
+                <td><input type="number" name="ClaimLines[${lineIndex}].HourlyRate" placeholder="Rate" step="0.01" required class="p-2 rounded border border-gray-300 w-full" oninput="updateAmount(this)"/></td>
+                <td class="lineAmount px-2 py-1 font-semibold">0.00</td>
+                <td><input type="file" name="ClaimLines[${lineIndex}].Attachment" class="p-1 w-full"/></td>
+            `;
+            tbody.appendChild(tr);
+            lineIndex++;
+        }
+
+        function updateAmount(input) {
+            const row = input.closest('tr');
+            const hours = parseFloat(row.querySelector('input[name$=".HoursWorked"]').value) || 0;
+            const rate = parseFloat(row.querySelector('input[name$=".HourlyRate"]').value) || 0;
+            row.querySelector('.lineAmount').innerText = (hours * rate).toFixed(2);
+        }
+
+        // Background Circles Animation
+        const bgCircles = document.getElementById("bg-circles-submit");
+        const colors = ["#FFD700", "#FF69B4", "#00FFFF", "#FF4500"];
+        for (let i = 0; i < 15; i++) {
+            const div = document.createElement("div");
+            div.style.position = "absolute";
+            div.style.borderRadius = "50%";
+            div.style.background = colors[Math.floor(Math.random() * colors.length)];
+            div.style.width = div.style.height = `${Math.random() * 50 + 20}px`;
+            div.style.top = `${Math.random() * 100}%`;
+            div.style.left = `${Math.random() * 100}%`;
+            div.style.opacity = 0.4;
+            bgCircles.appendChild(div);
+            gsap.to(div, {
+                y: "+=100",
+                x: "+=100",
+                repeat: -1,
+                yoyo: true,
+                duration: Math.random() * 5 + 5,
+                ease: "sine.inOut"
+            });
+        }
+
+        // Animate Form Entrance
+        gsap.from("form", { duration: 1.5, y: -100, opacity: 0, ease: "power2.out" });
+    </script>
+}
+

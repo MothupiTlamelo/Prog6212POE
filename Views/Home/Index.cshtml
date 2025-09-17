@@ -1,0 +1,74 @@
+﻿@{
+    ViewData["Title"] = "Welcome";
+}
+
+<div class="min-h-screen relative overflow-hidden bg-gradient-to-br from-indigo-500 via-purple-600 to-pink-500 flex flex-col justify-between">
+    <!-- Animated Gradient Background -->
+    <div id="animated-bg" class="absolute inset-0 opacity-30"></div>
+
+    <!-- Hero Section -->
+    <div class="text-center py-16 relative z-10">
+        <h1 id="welcome-title" class="text-5xl md:text-6xl font-bold text-white mb-6 opacity-0">
+            Welcome to CMCS
+        </h1>
+        <p id="welcome-text" class="text-lg md:text-xl text-gray-100 max-w-2xl mx-auto opacity-0">
+            The <strong>Contract Monthly Claim System</strong> where lecturers can submit claims,
+            coordinators can review them, and managers can approve them seamlessly.
+        </p>
+    </div>
+
+    <!-- Main Buttons -->
+    <div class="flex flex-col gap-8 items-center pb-20 relative z-10">
+        <a id="btn-lecturer" asp-controller="Lecturer" asp-action="Submit"
+           class="transform transition duration-300 hover:scale-110 bg-yellow-400 text-black font-bold py-4 px-8 rounded-xl text-2xl shadow-lg opacity-0">
+            Lecturer - Get Started
+        </a>
+
+        <a id="btn-coordinator" asp-controller="Coordinator" asp-action="Index"
+           class="transform transition duration-300 hover:scale-110 bg-blue-500 text-white font-bold py-4 px-8 rounded-xl text-2xl shadow-lg opacity-0">
+            Coordinator Dashboard
+        </a>
+
+        <a id="btn-manager" asp-controller="Manager" asp-action="Index"
+           class="transform transition duration-300 hover:scale-110 bg-green-500 text-white font-bold py-4 px-8 rounded-xl text-2xl shadow-lg opacity-0">
+            Manager Dashboard
+        </a>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-300 py-6 text-center relative z-10">
+        <p>&copy; @DateTime.Now.Year CMCS - All Rights Reserved.</p>
+    </footer>
+</div>
+
+<!-- GSAP Animation Script -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Background moving effect
+        gsap.to("#animated-bg", {
+            backgroundPosition: "200% 200%",
+            duration: 15,
+            repeat: -1,
+            yoyo: true,
+            ease: "linear"
+        });
+
+        // Fade in title and text
+        gsap.to("#welcome-title", { opacity: 1, y: -20, duration: 1, ease: "power2.out" });
+        gsap.to("#welcome-text", { opacity: 1, y: -20, duration: 1, delay: 0.5, ease: "power2.out" });
+
+        // Animate buttons one by one
+        gsap.to("#btn-lecturer", { opacity: 1, y: -10, duration: 0.8, delay: 1, ease: "back.out(1.7)" });
+        gsap.to("#btn-coordinator", { opacity: 1, y: -10, duration: 0.8, delay: 1.3, ease: "back.out(1.7)" });
+        gsap.to("#btn-manager", { opacity: 1, y: -10, duration: 0.8, delay: 1.6, ease: "back.out(1.7)" });
+
+        // Button click bounce effect
+        const buttons = document.querySelectorAll('a');
+        buttons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                gsap.to(btn, { scale: 0.9, duration: 0.1, yoyo: true, repeat: 1 });
+            });
+        });
+    });
+</script>
+

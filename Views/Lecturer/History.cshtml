@@ -1,0 +1,39 @@
+﻿@model IEnumerable<CMCS.Models.Claim>
+@{
+    ViewData["Title"] = "My Claims History";
+}
+
+<h2>My Claims History</h2>
+
+@if (!Model.Any())
+{
+    <p>You have not submitted any claims yet.</p>
+}
+else
+{
+    <table class="styled-table">
+        <thead>
+            <tr>
+                <th>Claim ID</th>
+                <th>Claim Month</th>
+                <th>Status</th>
+                <th>Total Amount</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var claim in Model)
+            {
+                <tr>
+                    <td>@claim.ClaimId</td>
+                    <td>@claim.ClaimMonth</td>
+                    <td>@claim.Status</td>
+                    <td>@claim.TotalAmount</td>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@claim.ClaimId">View</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

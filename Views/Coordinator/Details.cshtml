@@ -1,0 +1,115 @@
+﻿@model CMCS.Models.Claim
+@{
+    ViewData["Title"] = "Claim Details - Coordinator";
+}
+
+<h2>Claim #@Model.ClaimId Details</h2>
+
+<p><strong>Lecturer ID:</strong> @Model.LecturerId</p>
+<p><strong>Claim Month:</strong> @Model.ClaimMonth</p>
+<p><strong>Status:</strong> @Model.Status</p>
+<p><strong>Total Amount:</strong> @Model.TotalAmount.ToString("C")</p>
+
+<h3>Claim Lines</h3>
+<table class="styled-table">
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>Activity</th>
+            <th>Hours</th>
+            <th>Rate</th>
+            <th>Amount</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var line in Model.ClaimLines)
+        {
+            <tr>
+                <td>@line.Date.ToString("yyyy-MM-dd")</td>
+                <td>@line.ActivityDescription</td>
+                <td>@line.HoursWorked</td>
+                <td>@line.HourlyRate.ToString("C")</td>
+                <td>@line.LineAmount.ToString("C")</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<h3>Attachments</h3>
+@if (Model.Attachments != null && Model.Attachments.Count > 0)
+{
+    <ul>
+        @foreach (var file in Model.Attachments)
+        {
+            <li>@file.FileName (Uploaded on @file.UploadedAt.ToString("yyyy-MM-dd"))</li>
+        }
+    </ul>
+}
+else
+{
+    <p>No attachments uploaded.</p>
+}
+
+<div class="actions">
+    <form method="post" asp-action="Approve" asp-route-id="@Model.ClaimId" style="display:inline">
+        @Html.AntiForgeryToken()
+        <button type="submit" class="btn-approve">Approve</button>
+    </form>
+
+    <form method="post" asp-action="Reject" asp-route-id="@Model.ClaimId" style="display:inline">
+        @Html.AntiForgeryToken()
+        <button type="submit" class="btn-reject">Reject</button>
+    </form>
+</div>
+
+<a asp-action="Index" class="btn-back">Back to All Claims</a>
+
+<style>
+    .styled-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+    }
+
+        .styled-table th, .styled-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+
+        .styled-table th {
+            background-color: #2980B9;
+            color: white;
+        }
+
+        .styled-table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .styled-table tr:hover {
+            background-color: #ddd;
+        }
+
+    .btn-approve {
+        background-color: #27AE60;
+        color: white;
+        padding: 5px 10px;
+        border-radius: 5px;
+        margin-right: 5px;
+    }
+
+    .btn-reject {
+        background-color: #E74C3C;
+        color: white;
+        padding: 5px 10px;
+        border-radius: 5px;
+    }
+
+    .btn-back {
+        background-color: #3498DB;
+        color: white;
+        padding: 5px 10px;
+        border-radius: 5px;
+        text-decoration: none;
+    }
+</style>
