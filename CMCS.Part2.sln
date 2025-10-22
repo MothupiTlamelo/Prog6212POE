@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36414.22
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CMCS.Part2", "CMCS.Part2\CMCS.Part2.csproj", "{D3399EA7-80D7-4C52-8555-DAAB85356D8B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CMCS.Part2.Tests", "CMCS.Part2.Tests\CMCS.Part2.Tests.csproj", "{3AB67F79-86D6-FF2F-E906-C035ADC95069}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D3399EA7-80D7-4C52-8555-DAAB85356D8B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D3399EA7-80D7-4C52-8555-DAAB85356D8B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D3399EA7-80D7-4C52-8555-DAAB85356D8B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D3399EA7-80D7-4C52-8555-DAAB85356D8B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3AB67F79-86D6-FF2F-E906-C035ADC95069}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3AB67F79-86D6-FF2F-E906-C035ADC95069}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3AB67F79-86D6-FF2F-E906-C035ADC95069}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3AB67F79-86D6-FF2F-E906-C035ADC95069}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {01FB80C5-C5F7-483F-980A-4F6782B2AC10}
+	EndGlobalSection
+EndGlobal

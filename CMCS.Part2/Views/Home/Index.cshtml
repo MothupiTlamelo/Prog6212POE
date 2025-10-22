@@ -1,0 +1,22 @@
+﻿@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="homepage-container">
+    <h1 class="homepage-title">Welcome to CMCS</h1>
+    <p class="homepage-subtitle">Contract Monthly Claim System</p>
+
+    <div class="homepage-buttons">
+        <a asp-controller="Claim" asp-action="Submit" class="btn-home">Submit Claim</a>
+        <a asp-controller="Claim" asp-action="Pending" class="btn-home">Pending Claims</a>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        gsap.from(".homepage-title", {duration:1.5, y:-120, opacity:0, ease:"bounce.out"});
+        gsap.from(".homepage-subtitle", {duration:1.2, y:50, opacity:0, delay:0.3});
+        gsap.from(".btn-home", {scale:0, opacity:0, duration:1, stagger:0.2, delay:0.8, ease:"elastic.out(1,0.5)"});
+        gsap.to(".btn-home", {y:15, repeat:-1, yoyo:true, duration:2, ease:"sine.inOut"});
+    </script>
+}

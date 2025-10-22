@@ -1,0 +1,66 @@
+﻿@model IEnumerable<CMCS.Part2.Models.Claim>
+
+@{
+    ViewData["Title"] = "Pending Claims";
+}
+
+<div class="pending-container">
+    <h1 class="pending-title">Pending Claims</h1>
+    <p class="pending-subtitle">Review submitted claims and approve or reject them.</p>
+
+    @if (!Model.Any())
+    {
+        <p class="no-claims">No pending claims.</p>
+    }
+    else
+    {
+        <table class="pending-table">
+            <thead>
+                <tr>
+                    <th>Lecturer</th>
+                    <th>ID</th>
+                    <th>Month</th>
+                    <th>Hours Worked</th>
+                    <th>Hourly Rate</th>
+                    <th>Total Amount</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var claim in Model)
+                {
+                    <tr>
+                        <td>@claim.Lecturer.Name</td>
+                        <td>@claim.Lecturer.IdNumber</td>
+                        <td>@claim.Month</td>
+                        <td>@claim.HoursWorked</td>
+                        <td>@claim.HourlyRate</td>
+                        <td>@claim.TotalAmount</td>
+                        <td>@claim.Status</td>
+                        <td class="action-buttons">
+                            <form asp-action="Approve" method="post" style="display:inline;">
+                                <input type="hidden" name="id" value="@claim.Id" />
+                                <button type="submit" class="btn-approve">Approve</button>
+                            </form>
+                            <form asp-action="Reject" method="post" style="display:inline;">
+                                <input type="hidden" name="id" value="@claim.Id" />
+                                <button type="submit" class="btn-reject">Reject</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        gsap.from(".pending-title", {duration:1.5, y:-50, opacity:0, ease:"bounce.out"});
+        gsap.from(".pending-subtitle", {duration:1.2, opacity:0, delay:0.3});
+        gsap.from(".pending-table thead tr",{duration:1, delay:0.6, y:-20, opacity:0});
+        gsap.from(".pending-table tbody tr",{duration:1, delay:0.8, y:20, opacity:0, stagger:0.1});
+        gsap.from(".btn-approve,.btn-reject",{duration:1, delay:1.5, scale:0, opacity:0, stagger:0.2, ease:"elastic.out(1,0.5)"});
+    </script>
+}
